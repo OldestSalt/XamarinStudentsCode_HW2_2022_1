@@ -3,17 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HW2.MainPage">
 
-    
+
     <Grid Padding="5">
-        <Grid.Resources>
-            <ResourceDictionary>
-                <x:Array x:Key="testTexts" Type="{x:Type x:String}">
-                    <x:String >Заметка 1</x:String>
-                    <x:String >Заметка 2</x:String>
-                    <x:String >Заметка 3</x:String>
-                </x:Array>
-            </ResourceDictionary>
-        </Grid.Resources>
         <ScrollView x:Name="scroll">
             <Grid HorizontalOptions="FillAndExpand">
                 <Grid.ColumnDefinitions>
@@ -26,8 +17,8 @@
                         <DataTemplate>
                             <Grid>
                                 <AbsoluteLayout>
-                                    <Frame CornerRadius="5" AbsoluteLayout.LayoutBounds="1, 0, 0.5, 1" AbsoluteLayout.LayoutFlags="All" Padding="0">
-                                        <Image Aspect="AspectFill" Source="bin.png" HeightRequest="1"/>
+                                    <Frame CornerRadius="5" AbsoluteLayout.LayoutBounds="1, 0, 0.5, 1" AbsoluteLayout.LayoutFlags="All" Padding="0" BackgroundColor="red">
+                                        <Image Source="bin.png" HeightRequest="35" VerticalOptions="Center" HorizontalOptions="End" Margin="0, 0, 17, 0"/>
                                     </Frame>
                                 </AbsoluteLayout>
                                 <Frame BorderColor="LightGray" CornerRadius="5" ClassId="{Binding id}">
@@ -48,17 +39,24 @@
                 <StackLayout x:Name="notes_right" HorizontalOptions="FillAndExpand" Grid.Column="1" VerticalOptions="Start">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <Frame BorderColor="LightGray" CornerRadius="5" ClassId="{Binding id}">
-                                <Frame.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
-                                    <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated_1"/>
-                                </Frame.GestureRecognizers>
-                                <StackLayout>
-                                    <Label Text="{Binding visible_text}" FontSize="Medium"></Label>
-                                    <Label Text="{Binding creation_data}" FontSize="Small" Margin="0, 0, 0, -8"></Label>
-                                    <Label Text="{Binding text_count}" FontSize="Small" Margin="0, 0, 0, -8"></Label>
-                                </StackLayout>
-                            </Frame>
+                            <Grid>
+                                <AbsoluteLayout>
+                                    <Frame CornerRadius="5" AbsoluteLayout.LayoutBounds="0, 0, 0.5, 1" AbsoluteLayout.LayoutFlags="All" Padding="0" BackgroundColor="red">
+                                        <Image Source="bin.png" HeightRequest="35" VerticalOptions="Center" HorizontalOptions="Start" Margin="17, 0, 0, 0"/>
+                                    </Frame>
+                                </AbsoluteLayout>
+                                <Frame BorderColor="LightGray" CornerRadius="5" ClassId="{Binding id}">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                                        <PanGestureRecognizer PanUpdated="PanGestureRecognizer_PanUpdated_1"/>
+                                    </Frame.GestureRecognizers>
+                                    <StackLayout>
+                                        <Label Text="{Binding visible_text}" FontSize="Medium"></Label>
+                                        <Label Text="{Binding creation_data}" FontSize="Small" Margin="0, 0, 0, -8"></Label>
+                                        <Label Text="{Binding text_count}" FontSize="Small" Margin="0, 0, 0, -8"></Label>
+                                    </StackLayout>
+                                </Frame>
+                            </Grid>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </StackLayout>

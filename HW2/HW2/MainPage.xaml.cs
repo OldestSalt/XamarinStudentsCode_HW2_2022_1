@@ -5,163 +5,119 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace HW2
-{
-    public class Note
-    {
-        private static int idCounter = 0;
-
-        public int id { get; }
-        public string visible_text { get => UIFixerSuperUtilsBazuka.Shorten(full_text, 120, 3); }
-        public string full_text { get; set; }
-        public string text_count { get => $"{full_text.Length} символов"; }
-        public string creation_data { get; set; }
-
-        public Note()
-        {
-            id = ++idCounter;
-        }
-    }
-    public partial class MainPage : ContentPage
-    {
-        List<Note> list_all = new List<Note>();
+namespace HW2 {
+    public partial class MainPage : ContentPage {
+        public static List<Note> list_all = new List<Note>();
         ObservableCollection<Note> list_left = new ObservableCollection<Note>();
         ObservableCollection<Note> list_right = new ObservableCollection<Note>();
-        public MainPage()
-        {
+        public MainPage() {
             InitializeComponent();
             SaveSystem.Load(out list_all);
             BindableLayout.SetItemsSource(notes_left, list_left);
             BindableLayout.SetItemsSource(notes_right, list_right);
+            
         }
 
-        protected override void OnSizeAllocated(double width, double height)
-        {
+        protected override void OnSizeAllocated(double width, double height) {
             base.OnSizeAllocated(width, height);
-            SortNotes();
+            Task.Run(() => {
+                Device.BeginInvokeOnMainThread(() => {
+                    SortNotes();
+                });
+            });
         }
 
-        private void SortNotes()
-        {
+        private void SortNotes() {
             list_left.Clear();
             list_right.Clear();
 
-            foreach (var note in list_all)
-            {
-                if (notes_left.Height <= notes_right.Height)
-                {
+            foreach (var note in list_all) {
+                if (notes_left.Height <= notes_right.Height) {
                     list_left.Add(note);
                 }
-                else
-                {
+                else {
                     list_right.Add(note);
                 }
                 notes_left.ResolveLayoutChanges();
                 notes_right.ResolveLayoutChanges();
             }
-
         }
 
-        private void Button_Clicked(object sender, EventArgs e)
-        {
+        private void Button_Clicked(object sender, EventArgs e) {
             var editor = new EditorPage();
 
-            editor.Disappearing += (__, _) =>
-            {
-                if (editor.text == "")
-                {
-                    return;
+            editor.Disappearing += (__, _) => {
+                if (editor.note.full_text != "") {
+                    list_all.Add(editor.note);
+
+                    SortNotes();
+
+                    SaveSystem.Save(list_all);
                 }
-
-                var note = new Note { full_text = editor.text, creation_data = DateTime.Now.ToString("d")};
-                list_all.Add(note);
-
-                SortNotes();
-
-                SaveSystem.Save(list_all);
             };
             Navigation.PushAsync(editor);
         }
 
-        private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
-        {
+        private void TapGestureRecognizer_Tapped(object sender, EventArgs e) {
             var id = (sender as Frame).ClassId;
-            foreach (var item in list_all)
-            {
-                if (item.id.ToString() == id)
-                {
-                    var editor = new EditorPage(item.full_text);
+            var item = list_all.FirstOrDefault(x => x.id == int.Parse((sender as Frame).ClassId));
+            if (item.id.ToString() == id) {
+                var editor = new EditorPage(item);
 
-                    editor.Disappearing += (__, _) =>
-                    {
-                        item.full_text = editor.text;
+                editor.Disappearing += (__, _) => {
 
-                        SortNotes();
+                    SortNotes();
 
-                        SaveSystem.Save(list_all);
+                    SaveSystem.Save(list_all);
 
-                    };
-                    Navigation.PushAsync(editor);
-                    return;
-                }
+                };
+                Navigation.PushAsync(editor);
             }
         }
 
-        private void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e)
-        {
+        private void PanGestureRecognizer_PanUpdated(object sender, PanUpdatedEventArgs e) {
             FramePanUpdated(sender, e, true);
         }
 
-        private void PanGestureRecognizer_PanUpdated_1(object sender, PanUpdatedEventArgs e)
-        {
+        private void PanGestureRecognizer_PanUpdated_1(object sender, PanUpdatedEventArgs e) {
             FramePanUpdated(sender, e, false);
         }
 
-        private void FramePanUpdated(object sender, PanUpdatedEventArgs e, bool isLeft)
-        {
-            if (isLeft && e.TotalX > 0) return;
-            if (!isLeft && e.TotalX < 0) return;
+        private async void FramePanUpdated(object sender, PanUpdatedEventArgs e, bool isLeft) {
+            if (isLeft && e.TotalX > 0 || !isLeft && e.TotalX < 0) return;
 
             scroll.InputTransparent = true;
-            var frame = (sender as Frame);
-            double offset = frame.Width * 0.25;
+            var frame = sender as Frame;
+            double offset = frame.Width * 0.3;
 
-            switch (e.StatusType)
-            {
+            switch (e.StatusType) {
                 case GestureStatus.Running:
-                    frame.TranslationX = Math.Min(offset + 1, e.TotalX);
+                    frame.TranslationX = (isLeft ? -1 : 1) * Math.Min(offset + 1, Math.Abs(e.TotalX));
+                    //frame.TranslationX = Math.Min(offset + 1, e.TotalX);
+                    Console.WriteLine($"{offset + 1}, {e.TotalX} => {frame.TranslationX}");
                     break;
                 case GestureStatus.Completed:
                 
                 case GestureStatus.Canceled:
-                    if (Math.Abs(frame.TranslationX) < offset)
-                    {
-                        frame.TranslateTo(0, 0, 250);
+                    if (Math.Abs(frame.TranslationX) < offset) {
+                        await frame.TranslateTo(0, 0, 250);
                     }
-                    else
-                    {
+                    else {
                         frame.TranslationX = 0;
                         scroll.InputTransparent = false;
                         Note note = list_all.FirstOrDefault(u => u.id.ToString() == frame.ClassId);
-                        Task.Run(() =>
-                        {
-                            Device.BeginInvokeOnMainThread(() =>
-                            {
-                                DisplayAlert("Delation title", "Are you sure?", "Yes", "No", FlowDirection.RightToLeft).ContinueWith(async x => { 
-                                    if (await x) 
-                                    {
-                                        list_all.Remove(note);
-                                        SortNotes();
-                                    }
+                        bool res = await DisplayAlert("Are you sure?", "You will delete the note.", "Yes", "No", FlowDirection.RightToLeft);
+                        if (res) {
+                            await Task.Run(() => {
+                                Device.BeginInvokeOnMainThread(() => {
+                                    list_all.Remove(note);
+                                    SortNotes();
                                 });
                             });
-                        });
+                            SaveSystem.Save(list_all);
+                        };
                     }
                     break;
-                default:
-                    frame.TranslationX = 0;
-                    break;
-
             }
         }
     }

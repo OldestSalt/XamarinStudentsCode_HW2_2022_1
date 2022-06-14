@@ -5,7 +5,7 @@ using System.Text;
 
 namespace HW2
 {
-    static class UIFixerSuperUtilsBazuka
+    static class UIFixerSuperUtilsBazuka //awesome class name btw
     {
         public static string Shorten(string text, int max_length, int max_line_count)
         {

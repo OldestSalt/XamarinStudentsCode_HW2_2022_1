@@ -5,7 +5,7 @@
     <ContentPage.Content>
         <Grid Padding="5">
             <StackLayout>
-                <Label x:Name="count" FontSize="Subtitle" Margin="5" Text="0 символов"/>
+                <Label x:Name="count" FontSize="Subtitle" Margin="5" Text=""/>
                 <Editor x:Name="editor" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" TextChanged="Editor_TextChanged"></Editor>
             </StackLayout>
             <Button Clicked="Button_Clicked" CornerRadius="90" WidthRequest="70" HeightRequest="70" VerticalOptions="EndAndExpand" HorizontalOptions="EndAndExpand" Text="+" FontSize="Large" Margin="20"></Button>
