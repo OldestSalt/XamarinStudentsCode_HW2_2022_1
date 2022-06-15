@@ -2,11 +2,32 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HW2.EditorPage">
+
+    <!--<NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
+            <Image Margin="10, 0" VerticalOptions="Center" HeightRequest="30"  Source="undo.png">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="" NumberOfTapsRequired="1"/>
+                </Image.GestureRecognizers>
+            </Image>
+            <Image Margin="10, 0" VerticalOptions="Center" HeightRequest="30"  Source="redo.png">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OpenHistory" NumberOfTapsRequired="1"/>
+                </Image.GestureRecognizers>
+            </Image>
+            <Image Margin="10, 0" VerticalOptions="Center" HeightRequest="30"  Source="done.png">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OpenHistory" NumberOfTapsRequired="1"/>
+                </Image.GestureRecognizers>
+            </Image>
+        </StackLayout>
+    </NavigationPage.TitleView>-->
+
     <ContentPage.Content>
         <Grid Padding="5">
             <StackLayout>
                 <Label x:Name="count" FontSize="Subtitle" Margin="5" Text=""/>
-                <Editor x:Name="editor" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" TextChanged="Editor_TextChanged"></Editor>
+                <Editor x:Name="editor" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"></Editor>
             </StackLayout>
             <Button Clicked="Button_Clicked" CornerRadius="90" WidthRequest="70" HeightRequest="70" VerticalOptions="EndAndExpand" HorizontalOptions="EndAndExpand" Text="+" FontSize="Large" Margin="20"></Button>
         </Grid>

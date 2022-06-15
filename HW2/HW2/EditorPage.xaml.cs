@@ -16,17 +16,12 @@ namespace HW2 {
             }
             editor.SetBinding(Editor.TextProperty, new Binding { Source = this.note, Path = "full_text", Mode = BindingMode.TwoWay });
             count.SetBinding(Label.TextProperty, new Binding { Source = this.note, Path = "text_count" });
-            //editor.Text = this.note.full_text;
 
         }
 
         protected override void OnAppearing() {
             base.OnAppearing();
             editor.Focus();
-        }
-
-        private void Editor_TextChanged(object sender, TextChangedEventArgs e) {
-            //note.full_text = e.NewTextValue;
         }
 
         private void Button_Clicked(object sender, EventArgs e) {
