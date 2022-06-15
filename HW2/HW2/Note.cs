@@ -28,7 +28,7 @@ namespace HW2 {
         public string creation_data { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string property = "") {
+        public void OnPropertyChanged(string property = "") {
             if (PropertyChanged != null) {
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
             }

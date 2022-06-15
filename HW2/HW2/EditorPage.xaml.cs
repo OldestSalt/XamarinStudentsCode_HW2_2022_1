@@ -12,11 +12,11 @@ namespace HW2 {
                 this.note = note;
             }
             else {
-                this.note = new Note() { full_text = "", creation_data = DateTime.Now.ToString("dd/MM/yyyy") };
+                this.note = new Note() { full_text = "", creation_data = DateTime.Now.ToString("hh:mm, dd/MM/yyyy") };
             }
-            editor.SetBinding(Editor.TextProperty, new Binding { Source = this.note.full_text, Mode = BindingMode.OneWayToSource });
-            count.SetBinding(Label.TextProperty, new Binding { Source = this.note.text_count }); //почему-то не обновляется, призываю индусов \o/
-            editor.Text = this.note.full_text;
+            editor.SetBinding(Editor.TextProperty, new Binding { Source = this.note, Path = "full_text", Mode = BindingMode.TwoWay });
+            count.SetBinding(Label.TextProperty, new Binding { Source = this.note, Path = "text_count" });
+            //editor.Text = this.note.full_text;
 
         }
 
@@ -26,7 +26,7 @@ namespace HW2 {
         }
 
         private void Editor_TextChanged(object sender, TextChangedEventArgs e) {
-            note.full_text = e.NewTextValue;
+            //note.full_text = e.NewTextValue;
         }
 
         private void Button_Clicked(object sender, EventArgs e) {
