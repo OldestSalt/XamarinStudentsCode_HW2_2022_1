@@ -3,21 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HW2.MainPage">
 
-    <NavigationPage.TitleView>
-        <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
-            <Image Margin="10, 0" VerticalOptions="Center" HeightRequest="30"  Source="undo.png">
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Undo" NumberOfTapsRequired="1"/>
-                </Image.GestureRecognizers>
-            </Image>
-            <Image Margin="10, 0" VerticalOptions="Center" HeightRequest="30"  Source="redo.png">
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Redo" NumberOfTapsRequired="1"/>
-                </Image.GestureRecognizers>
-            </Image>
-        </StackLayout>
-    </NavigationPage.TitleView>
-
     <Grid Padding="5">
         <ScrollView x:Name="scroll">
             <Grid HorizontalOptions="FillAndExpand">

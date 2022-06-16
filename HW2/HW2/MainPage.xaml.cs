@@ -47,7 +47,7 @@ namespace HW2 {
             var editor = new EditorPage();
 
             editor.Disappearing += (__, _) => {
-                if (editor.note.full_text != "") {
+                if (editor.note != null) {
                     list_all.Add(editor.note);
 
                     Task.Run(() => {
